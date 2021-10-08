@@ -24,6 +24,9 @@
 # HINT: You may want to use itertools.combinations to solve the final jumble
 # import itertools
 
+import enchant
+from itertools import permutations
+
 
 def get_file_lines(filename='/usr/share/dict/words'):
     """Return a list of strings on separate lines in the given text file with
@@ -55,10 +58,19 @@ def solve_one_jumble(letters):
     # Example: solve_one_jumble('ILST') --> ['LIST', 'SILT', 'SLIT']
     valid_words = []
 
+
     # TODO: Unscramble the given letters into all valid words (or at least one)
     # ========> YOUR CODE HERE <========
+    d = enchant.Dict("en_US")
 
-    return valid_words
+    list_of_permutations = [''.join(p) for p in permutations(letters)]
+    for word in list_of_permutations:
+      if d.check(word):
+        print("\n" + word)
+        # valid_words.append(word)
+        return word
+
+    # return valid_words
 
 
 def solve_final_jumble(letters, final_circles):
@@ -101,6 +113,32 @@ def solve_final_jumble(letters, final_circles):
 
     # TODO: Unscramble the given letters into all valid phrases
     # ========> YOUR CODE HERE <========
+
+    d = enchant.Dict("en_US")
+
+    # THIS IS ASSUMING THAT A PHRASE ALWAYS HAS 2 WORDS
+    # list_one get list of permutations with length of first word in phrase
+    # list_two get list of permutations with length of second word in phrase  
+
+    list_one = [''.join(p) for p in permutations(letters, len( group_size[0] ))]
+    list_two = [''.join(p) for p in permutations(letters, len( group_size[1] ))]
+
+    result_list_one = []
+    result_list_two = []
+
+    for word in list_one:
+      if d.check(word):
+        result_list_one.append(word)
+    
+    for word in list_two:
+      if d.check(word):
+        result_list_two.append(word)
+
+
+    valid_phrases.append(result_list_one)
+    valid_phrases.append(result_list_two)
+
+    print("Valid phrases: ", valid_phrases)
 
     return valid_phrases
 
