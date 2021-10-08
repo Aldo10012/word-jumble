@@ -66,11 +66,11 @@ def solve_one_jumble(letters):
     list_of_permutations = [''.join(p) for p in permutations(letters)]
     for word in list_of_permutations:
       if d.check(word):
-        print("\n" + word)
-        # valid_words.append(word)
-        return word
+        # print("\n" + word)
+        valid_words.append(word)
+        # return word
 
-    # return valid_words
+    return valid_words
 
 
 def solve_final_jumble(letters, final_circles):
@@ -120,23 +120,30 @@ def solve_final_jumble(letters, final_circles):
     # list_one get list of permutations with length of first word in phrase
     # list_two get list of permutations with length of second word in phrase  
 
-    list_one = [''.join(p) for p in permutations(letters, len( group_size[0] ))]
-    list_two = [''.join(p) for p in permutations(letters, len( group_size[1] ))]
+    list_one = [''.join(p) for p in permutations(letters, group_sizes[0] )]
+    list_two = [''.join(p) for p in permutations(letters, group_sizes[1] )]
 
-    result_list_one = []
-    result_list_two = []
+    valid_first_words = []
+    valid_second_words = []
 
+    # This appends all real words from list_one to valid_first_words
     for word in list_one:
       if d.check(word):
-        result_list_one.append(word)
-    
+        valid_first_words.append(word)
+        break
+        
+    # This appends all real words from list_two to valid_second_words
     for word in list_two:
       if d.check(word):
-        result_list_two.append(word)
+        valid_second_words.append(word)
+        break
 
-
-    valid_phrases.append(result_list_one)
-    valid_phrases.append(result_list_two)
+    # using valid_first_words & valid_second_words to make possible phrases & appending it to valid_phrases
+    for first_word in valid_first_words:
+        for second_word in valid_second_words:
+            phrase = f"{first_word} {second_word}"
+            valid_phrases.append(phrase)            
+        
 
     print("Valid phrases: ", valid_phrases)
 
